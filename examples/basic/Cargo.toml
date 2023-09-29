@@ -9,7 +9,7 @@ console_error_panic_hook = "0.1"
 gloo-console = "0.2"
 wasm-bindgen = "0.2"
 ybc = { path = "../../" }
-yew = "0.20"
+yew = "0.21"
 
 [features]
 default = []

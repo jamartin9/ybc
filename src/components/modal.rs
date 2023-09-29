@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use yew::prelude::*;
 
-use yew_agent::{use_bridge, HandlerId, Public, UseBridgeHandle, Worker, WorkerLink};
+use yew_agent::worker::{use_worker_bridge, UseWorkerBridgeHandle, Worker, HandlerId, WorkerScope};
 
 /// Modal actions.
 pub enum ModalMsg {
@@ -56,7 +56,7 @@ pub fn modal(props: &ModalProps) -> Html {
     {
         let id = props.id.clone();
 
-        let _bridge: UseBridgeHandle<ModalCloser> = use_bridge(move |response: ModalCloseMsg| {
+        let _bridge: UseWorkerBridgeHandle<ModalCloser> = use_worker_bridge(move |response: ModalCloseMsg| {
             if response.0 == id {
                 is_active.set(false);
             } else {
@@ -130,7 +130,7 @@ pub fn modal_card(props: &ModalCardProps) -> Html {
     {
         let id = props.id.clone();
 
-        let _bridge: UseBridgeHandle<ModalCloser> = use_bridge(move |response: ModalCloseMsg| {
+        let _bridge: UseWorkerBridgeHandle<ModalCloser> = use_worker_bridge(move |response: ModalCloseMsg| {
             if response.0 == id {
                 is_active.set(false);
             } else {
@@ -213,7 +213,6 @@ pub struct ModalCloseMsg(pub String);
 /// This pattern allows you to communicate with a modal by its given ID, allowing
 /// you to close the modal from anywhere in your application.
 pub struct ModalCloser {
-    link: WorkerLink<Self>,
     subscribers: HashSet<HandlerId>,
 }
 
@@ -222,27 +221,26 @@ impl Worker for ModalCloser {
     type Message = ();
     // The agent receives requests to close modals by ID.
     type Output = ModalCloseMsg;
-    type Reach = Public<ModalCloser>;
 
     // The agent forwards the input to all registered modals.
 
-    fn create(link: WorkerLink<Self>) -> Self {
-        Self { link, subscribers: HashSet::new() }
+    fn create(_link: &WorkerScope<Self>) -> Self {
+        Self { subscribers: HashSet::new() }
     }
 
-    fn update(&mut self, _: Self::Message) {}
+    fn update(&mut self, _scope: &WorkerScope<Self>, _: Self::Message) {}
 
-    fn handle_input(&mut self, msg: Self::Input, _: HandlerId) {
-        for cmp in self.subscribers.iter() {
-            self.link.respond(*cmp, msg.clone());
-        }
+    fn received(&mut self, link: &WorkerScope<Self>, msg: Self::Input, _: HandlerId) {
+        self.subscribers.iter().for_each(|cmp| {
+            link.respond(*cmp, msg.clone());
+        });
     }
 
-    fn connected(&mut self, id: HandlerId) {
+    fn connected(&mut self, _scope: &WorkerScope<Self>, id: HandlerId) {
         self.subscribers.insert(id);
     }
 
-    fn disconnected(&mut self, id: HandlerId) {
+    fn disconnected(&mut self, _scope: &WorkerScope<Self>, id: HandlerId) {
         self.subscribers.remove(&id);
     }
 }
