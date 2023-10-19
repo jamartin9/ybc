@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use yew::prelude::*;
 
-use yew_agent::worker::{use_worker_bridge, UseWorkerBridgeHandle, Worker, HandlerId, WorkerScope};
+use yew_agent::worker::{use_worker_bridge, HandlerId, UseWorkerBridgeHandle, Worker, WorkerScope};
 
 /// Modal actions.
 pub enum ModalMsg {
@@ -59,7 +59,6 @@ pub fn modal(props: &ModalProps) -> Html {
         let _bridge: UseWorkerBridgeHandle<ModalCloser> = use_worker_bridge(move |response: ModalCloseMsg| {
             if response.0 == id {
                 is_active.set(false);
-            } else {
             }
         });
     }
@@ -133,7 +132,6 @@ pub fn modal_card(props: &ModalCardProps) -> Html {
         let _bridge: UseWorkerBridgeHandle<ModalCloser> = use_worker_bridge(move |response: ModalCloseMsg| {
             if response.0 == id {
                 is_active.set(false);
-            } else {
             }
         });
     }
@@ -214,6 +212,7 @@ pub struct ModalCloseMsg(pub String);
 /// you to close the modal from anywhere in your application.
 pub struct ModalCloser {
     subscribers: HashSet<HandlerId>,
+    link: WorkerScope<Self>,
 }
 
 impl Worker for ModalCloser {
@@ -224,15 +223,15 @@ impl Worker for ModalCloser {
 
     // The agent forwards the input to all registered modals.
 
-    fn create(_link: &WorkerScope<Self>) -> Self {
-        Self { subscribers: HashSet::new() }
+    fn create(link: &WorkerScope<Self>) -> Self {
+        Self { subscribers: HashSet::new(), link: link.clone() }
     }
 
     fn update(&mut self, _scope: &WorkerScope<Self>, _: Self::Message) {}
 
-    fn received(&mut self, link: &WorkerScope<Self>, msg: Self::Input, _: HandlerId) {
+    fn received(&mut self, _link: &WorkerScope<Self>, msg: Self::Input, _: HandlerId) {
         self.subscribers.iter().for_each(|cmp| {
-            link.respond(*cmp, msg.clone());
+            self.link.respond(*cmp, msg.clone());
         });
     }
 
