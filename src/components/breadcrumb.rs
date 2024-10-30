@@ -46,13 +46,13 @@ pub fn breadcrumb(props: &BreadcrumbProps) -> Html {
 ///
 /// https://bulma.io/documentation/components/breadcrumb/#sizes
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display(fmt = "are-{}")]
+#[display("are-{_variant}")]
 pub enum BreadcrumbSize {
-    #[display(fmt = "small")]
+    #[display("small")]
     Small,
-    #[display(fmt = "medium")]
+    #[display("medium")]
     Medium,
-    #[display(fmt = "large")]
+    #[display("large")]
     Large,
 }
 
@@ -60,14 +60,14 @@ pub enum BreadcrumbSize {
 ///
 /// https://bulma.io/documentation/components/breadcrumb/#alternative-separators
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display(fmt = "has-{}-separator")]
+#[display("has-{_variant}-separator")]
 pub enum BreadcrumbSeparator {
-    #[display(fmt = "arrow")]
+    #[display("arrow")]
     Arrow,
-    #[display(fmt = "bullet")]
+    #[display("bullet")]
     Bullet,
-    #[display(fmt = "dot")]
+    #[display("dot")]
     Dot,
-    #[display(fmt = "succeeds")]
+    #[display("succeeds")]
     Succeeds,
 }

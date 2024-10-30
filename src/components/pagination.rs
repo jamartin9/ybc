@@ -80,16 +80,16 @@ pub fn pagination_item(props: &PaginationItemProps) -> Html {
 
 /// A pagination item type.
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display(fmt = "pagination-{}")]
+#[display("pagination-{_variant}")]
 pub enum PaginationItemType {
     /// A pagination link for a specific page number.
-    #[display(fmt = "link")]
+    #[display("link")]
     Link,
     /// A pagination button for the next page.
-    #[display(fmt = "next")]
+    #[display("next")]
     Next,
     /// A pagination button for the previous page.
-    #[display(fmt = "previous")]
+    #[display("previous")]
     Previous,
 }
 

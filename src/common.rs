@@ -4,27 +4,27 @@ use yew::html::IntoPropValue;
 
 /// Common alignment classes.
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display(fmt = "is-{}")]
+#[display("is-{_variant}")]
 pub enum Alignment {
-    #[display(fmt = "left")]
+    #[display("left")]
     Left,
-    #[display(fmt = "centered")]
+    #[display("centered")]
     Centered,
-    #[display(fmt = "right")]
+    #[display("right")]
     Right,
 }
 
 /// Common size classes.
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display(fmt = "is-{}")]
+#[display("is-{_variant}")]
 pub enum Size {
-    #[display(fmt = "small")]
+    #[display("small")]
     Small,
-    #[display(fmt = "normal")]
+    #[display("normal")]
     Normal,
-    #[display(fmt = "medium")]
+    #[display("medium")]
     Medium,
-    #[display(fmt = "large")]
+    #[display("large")]
     Large,
 }
 

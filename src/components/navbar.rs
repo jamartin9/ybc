@@ -161,11 +161,11 @@ impl Component for Navbar {
 /// NOTE WELL: in order to work properly, the root `html` or `body` element must be configured with
 /// the corresponding `has-navbar-fixed-top` or `has-navbar-fixed-bottom` class.
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display(fmt = "is-{}")]
+#[display("is-{_variant}")]
 pub enum NavbarFixed {
-    #[display(fmt = "fixed-top")]
+    #[display("fixed-top")]
     Top,
-    #[display(fmt = "fixed-bottom")]
+    #[display("fixed-bottom")]
     Bottom,
 }
 
@@ -177,9 +177,9 @@ pub enum NavbarFixed {
 /// [https://bulma.io/documentation/components/navbar/#navbar-item](https://bulma.io/documentation/components/navbar/#navbar-item)
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
 pub enum NavbarItemTag {
-    #[display(fmt = "a")]
+    #[display("a")]
     A,
-    #[display(fmt = "div")]
+    #[display("div")]
     Div,
 }
 
