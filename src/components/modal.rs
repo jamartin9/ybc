@@ -170,46 +170,6 @@ pub fn modal_card(props: &ModalCardProps) -> Html {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct ModalCloseMsg(pub String);
 
-/// An agent used for being able to close `Modal` & `ModalCard` instances by ID.
-///
-/// If custom modal closing functionality is need for your modal instance, the following
-/// pattern is recommended.
-///
-/// First, in your component which is using this modal, configure a `ModalCloser` dispatcher.
-/// ```rust
-/// use yew::agent::Dispatcher;
-/// use yew::prelude::*;
-/// // .. snip ..
-/// fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
-///     let bridge = ModalCloser::dispatcher();
-///     Self { link, props, bridge }
-/// }
-/// ```
-///
-/// Next, in your component's `view` method, setup a callback to handle your component's close
-/// event. ```rust
-/// let closer = self.link.callback(|_| ModalCloseMsg("modal-0".into()));
-/// // ... snip ...
-/// <ModalCard
-///     id="modal-0"
-///     // ... snip ...
-///     footer=html!{
-///         <Button onclick=Some(closer)>{"Close"}</Button>
-///     }
-/// />
-/// ```
-///
-/// Finally, in your component's `update` method, send the `ModalCloseMsg` over to the agent which
-/// will forward the message to the modal to cause it to close.
-/// ```rust
-/// fn update(&mut self, msg: Self::Message) -> ShouldRender {
-///     self.bridge.send(msg);
-///     true
-/// }
-/// ```
-///
-/// This pattern allows you to communicate with a modal by its given ID, allowing
-/// you to close the modal from anywhere in your application.
 pub struct ModalCloser {
     subscribers: HashSet<HandlerId>,
     link: WorkerScope<Self>,
